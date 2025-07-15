@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -8,65 +8,64 @@ import {
   MenuItem,
   Select,
   Button,
-} from "@mui/material"
-import { v4 as uuidv4 } from "uuid"
-import { useTaskContext } from "../context/TaskContext"
-import type { Task } from "../types/Task"
+} from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+import { useTaskContext } from '@features/taskContext/model/TaskContext';
+import type { Task } from '@entities/task/model/Types';
 
 function TaskDetails() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const { tasks, updateTask, addTask } = useTaskContext()
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { tasks, updateTask, addTask } = useTaskContext();
 
-  const task = tasks.find((t: Task) => t.id === id)
+  const task = tasks.find((t: Task) => t.id === id);
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [category, setCategory] = useState("")
-  const [status, setStatus] = useState("")
-  const [priority, setPriority] = useState("")
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [status, setStatus] = useState('');
+  const [priority, setPriority] = useState('');
 
   useEffect(() => {
     if (task) {
-      setTitle(task.title)
-      setDescription(task.description || "")
-      setCategory(task.category)
-      setStatus(task.status)
-      setPriority(task.priority)
+      setTitle(task.title);
+      setDescription(task.description || '');
+      setCategory(task.category);
+      setStatus(task.status);
+      setPriority(task.priority);
     }
-  }, [task])
+  }, [task]);
 
   const handleSave = () => {
-  if (!title || !category || !status || !priority) return
+    if (!title || !category || !status || !priority) return;
 
-  const newOrUpdatedTask: Task = {
-    id: task?.id || uuidv4(),
-    title,
-    description,
-    category: category as Task["category"],
-    status: status as Task["status"],
-    priority: priority as Task["priority"],
-  }
+    const newOrUpdatedTask: Task = {
+      id: task?.id || uuidv4(),
+      title,
+      description,
+      category: category as Task['category'],
+      status: status as Task['status'],
+      priority: priority as Task['priority'],
+    };
 
-  if (task) {
-    updateTask(newOrUpdatedTask)
-  } else {
-    addTask(newOrUpdatedTask)
-  }
+    if (task) {
+      updateTask(newOrUpdatedTask);
+    } else {
+      addTask(newOrUpdatedTask);
+    }
 
-  navigate("/")
-}
-
+    navigate('/');
+  };
 
   return (
     <Box
       component="form"
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         gap: 2,
         maxWidth: 600,
-        mx: "auto",
+        mx: 'auto',
         p: 2,
       }}
     >
@@ -104,7 +103,11 @@ function TaskDetails() {
 
       <FormControl fullWidth>
         <InputLabel>Status</InputLabel>
-        <Select value={status} onChange={(e) => setStatus(e.target.value)} label="Status">
+        <Select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          label="Status"
+        >
           <MenuItem value="To Do">To Do</MenuItem>
           <MenuItem value="In Progress">In Progress</MenuItem>
           <MenuItem value="Done">Done</MenuItem>
@@ -113,23 +116,27 @@ function TaskDetails() {
 
       <FormControl fullWidth>
         <InputLabel>Priority</InputLabel>
-        <Select value={priority} onChange={(e) => setPriority(e.target.value)} label="Priority">
+        <Select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+          label="Priority"
+        >
           <MenuItem value="Low">Low</MenuItem>
           <MenuItem value="Medium">Medium</MenuItem>
           <MenuItem value="High">High</MenuItem>
         </Select>
       </FormControl>
 
-      <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
+      <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
         <Button variant="contained" onClick={handleSave}>
           Save
         </Button>
-        <Button variant="outlined" onClick={() => navigate("/")}>
+        <Button variant="outlined" onClick={() => navigate('/')}>
           Cancel
         </Button>
       </Box>
     </Box>
-  )
+  );
 }
 
-export default TaskDetails
+export default TaskDetails;

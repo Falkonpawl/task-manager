@@ -1,7 +1,7 @@
-import TaskList from "../components/TaskList"
-import { Typography } from "@mui/material"
-import { Box, Grid } from "@mui/material"
-import { Link } from "@mui/material"
+import TaskList from '@entities/taskList/ui/TaskList';
+import { Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import { Link } from '@mui/material';
 function HomePage() {
   return (
     <>
@@ -10,9 +10,9 @@ function HomePage() {
           component="section"
           sx={{
             p: 2,
-            border: "1px solid black",
+            border: '1px solid black',
             borderRadius: 1,
-            textAlign: "center",
+            textAlign: 'center',
             mb: 5,
           }}
         >
@@ -25,6 +25,6 @@ function HomePage() {
 
       <TaskList />
     </>
-  )
+  );
 }
-export default HomePage
+export default HomePage;

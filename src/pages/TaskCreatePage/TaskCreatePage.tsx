@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material"
-import { Box, Grid } from "@mui/material"
-import TaskDetails from "../components/TaskDetails"
+import { Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import TaskDetails from '@features/taskDetails/ui/TaskDetails';
 function TaskCreatePage() {
   return (
     <>
@@ -9,9 +9,9 @@ function TaskCreatePage() {
           component="section"
           sx={{
             p: 2,
-            border: "1px solid black",
+            border: '1px solid black',
             borderRadius: 1,
-            textAlign: "center",
+            textAlign: 'center',
             mb: 5,
           }}
         >
@@ -21,6 +21,6 @@ function TaskCreatePage() {
 
       <TaskDetails />
     </>
-  )
+  );
 }
-export default TaskCreatePage
+export default TaskCreatePage;
