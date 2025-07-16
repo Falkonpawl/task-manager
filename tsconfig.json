@@ -10,7 +10,8 @@
       "@app/*": ["app/*"],
       "@pages/*": ["pages/*"],
       "@entities/*": ["entities/*"],
-      "@features/*": ["features/*"]
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

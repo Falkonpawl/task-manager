@@ -16,6 +16,9 @@ interface TaskItemProps {
   task: Task;
 }
 
+/**
+ * Возвращает цвет чипа в зависимости от приоритета задачи.
+ */
 function getPriorityColor(priority: string) {
   switch (priority) {
     case 'High':
@@ -29,6 +32,10 @@ function getPriorityColor(priority: string) {
   }
 }
 
+/**
+ * Компонент отображения карточки задачи.
+ * Включает заголовок, описание, чипы и кнопки редактирования/удаления.
+ */
 function TaskItem({ task }: TaskItemProps) {
   const { deleteTask } = useTaskContext();
 
@@ -68,7 +75,7 @@ function TaskItem({ task }: TaskItemProps) {
             display: 'flex',
             gap: 1,
             flexWrap: 'wrap',
-            mb: 2,
+            mb: 1,
           }}
         >
           <Chip color="secondary" label={task.category} size="small" />
@@ -80,7 +87,15 @@ function TaskItem({ task }: TaskItemProps) {
           />
         </Box>
 
-        <CardActions sx={{ p: 0 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ fontStyle: 'italic', mt: 1 }}
+        >
+          Created at: {task.createdAt}
+        </Typography>
+
+        <CardActions sx={{ p: 0, mt: 2 }}>
           <Link to={`/task/${task.id}`} style={{ textDecoration: 'none' }}>
             <Button size="small" variant="contained">
               Edit

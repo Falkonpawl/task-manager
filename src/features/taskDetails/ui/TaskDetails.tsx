@@ -8,11 +8,17 @@ import {
   MenuItem,
   Select,
   Button,
+  FormHelperText,
 } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useTaskContext } from '@features/taskContext/model/TaskContext';
 import type { Task } from '@entities/task/model/Types';
+import getFormattedDate from '@shared/lib/formatDate/formatDate';
 
+/**
+ * Универсальный компонент формы для создания и редактирования задач.
+ * Работает как на маршруте `/task/new`, так и `/task/:id`.
+ */
 function TaskDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,6 +32,13 @@ function TaskDetails() {
   const [status, setStatus] = useState('');
   const [priority, setPriority] = useState('');
 
+  const [errors, setErrors] = useState({
+    title: false,
+    category: false,
+    status: false,
+    priority: false,
+  });
+
   useEffect(() => {
     if (task) {
       setTitle(task.title);
@@ -36,9 +49,29 @@ function TaskDetails() {
     }
   }, [task]);
 
-  const handleSave = () => {
-    if (!title || !category || !status || !priority) return;
+  /**
+   * Проверяет обязательные поля задачи.
+   * Если поле пустое — возвращает false и сохраняет флаги ошибок.
+   */
+  const validate = () => {
+    const newErrors = {
+      title: !title.trim(),
+      category: !category,
+      status: !status,
+      priority: !priority,
+    };
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(Boolean);
+  };
 
+  const handleSave = () => {
+    if (!validate()) return;
+
+    /**
+     * Собирает задачу на основе полей формы.
+     * Если это редактирование — сохраняет старый `id` и `createdAt`.
+     * Если новая задача — генерирует `id` и `createdAt`.
+     */
     const newOrUpdatedTask: Task = {
       id: task?.id || uuidv4(),
       title,
@@ -46,6 +79,7 @@ function TaskDetails() {
       category: category as Task['category'],
       status: status as Task['status'],
       priority: priority as Task['priority'],
+      createdAt: task?.createdAt || getFormattedDate(),
     };
 
     if (task) {
@@ -75,6 +109,8 @@ function TaskDetails() {
         fullWidth
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        error={errors.title}
+        helperText={errors.title ? 'Title is required' : ' '}
       />
       <TextField
         label="Description"
@@ -85,7 +121,7 @@ function TaskDetails() {
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <FormControl fullWidth>
+      <FormControl fullWidth error={errors.category}>
         <InputLabel id="category-label">Category</InputLabel>
         <Select
           labelId="category-label"
@@ -99,9 +135,12 @@ function TaskDetails() {
           <MenuItem value="Refactor">Refactor</MenuItem>
           <MenuItem value="Test">Test</MenuItem>
         </Select>
+        {errors.category && (
+          <FormHelperText>Category is required</FormHelperText>
+        )}
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth error={errors.status}>
         <InputLabel>Status</InputLabel>
         <Select
           value={status}
@@ -112,9 +151,10 @@ function TaskDetails() {
           <MenuItem value="In Progress">In Progress</MenuItem>
           <MenuItem value="Done">Done</MenuItem>
         </Select>
+        {errors.status && <FormHelperText>Status is required</FormHelperText>}
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth error={errors.priority}>
         <InputLabel>Priority</InputLabel>
         <Select
           value={priority}
@@ -125,6 +165,9 @@ function TaskDetails() {
           <MenuItem value="Medium">Medium</MenuItem>
           <MenuItem value="High">High</MenuItem>
         </Select>
+        {errors.priority && (
+          <FormHelperText>Priority is required</FormHelperText>
+        )}
       </FormControl>
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
